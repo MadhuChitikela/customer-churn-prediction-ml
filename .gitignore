@@ -1,0 +1,12 @@
+node_modules/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+.vercel
+/tmp/
+model/*.pkl
+model/*.pkl.compressed
+# Keep the small exported model and stats
+!model/model_lite.json
+!frontend/stats.json

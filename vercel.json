@@ -1,0 +1,20 @@
+{
+    "rewrites": [
+        {
+            "source": "/(index.html)?",
+            "destination": "/frontend/index.html"
+        },
+        {
+            "source": "/script.js",
+            "destination": "/frontend/script.js"
+        },
+        {
+            "source": "/style.css",
+            "destination": "/frontend/style.css"
+        },
+        {
+            "source": "/stats.json",
+            "destination": "/frontend/stats.json"
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "customer-churn-ai-predictor",
+  "version": "1.0.0",
+  "description": "Premium Customer Churn Prediction System",
+  "main": "index.js",
+  "scripts": {
+    "start": "next start",
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.1"
+  }
+}

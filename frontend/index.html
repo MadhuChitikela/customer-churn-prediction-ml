@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChurnAI | Customer Churn Prediction</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <i class="fas fa-brain"></i>
+            <span>ChurnAI</span>
+        </div>
+        <nav class="nav-links">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-chart-line"></i> Analytics
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-users"></i> Customers
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Predictive Analytics Dashboard</h1>
+            <div class="user-profile">
+                <span id="date-display"></span>
+            </div>
+        </header>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Dataset Sources</div>
+                <div class="stat-value" id="stat-sources" style="font-size: 1rem; color: #818cf8;">Loading...</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Records</div>
+                <div class="stat-value" id="stat-total">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg. Churn Rate</div>
+                <div class="stat-value" id="stat-rate" style="color: #ef4444;">-%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Model Accuracy</div>
+                <div class="stat-value" id="stat-accuracy" style="color: #10b981;">-%</div>
+            </div>
+        </section>
+
+        <section class="dataset-switcher card animate-fade" style="margin-bottom: 2rem;">
+            <h2 class="section-title"><i class="fas fa-database"></i> Source Datasets</h2>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <button class="btn-source active" onclick="switchDataset('all', this)">Universal (3 Merged)</button>
+                <button class="btn-source" onclick="switchDataset('telco', this)">Telecom Churn</button>
+                <button class="btn-source" onclick="switchDataset('bank', this)">Bank Churn</button>
+                <button class="btn-source" onclick="switchDataset('ecomm', this)">E-Commerce</button>
+            </div>
+        </section>
+
+        <section class="grid-2">
+            <div class="card animate-fade">
+                <h2 class="section-title"><i class="fas fa-user-plus"></i> Customer Prediction Form</h2>
+                <form id="prediction-form" class="form-grid">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Prediction Scenario</label>
+                        <select id="scenario-select">
+                            <option value="universal">Universal / General Prediction</option>
+                            <option value="telco">Telecom Specific</option>
+                            <option value="bank">Banking Portfolio</option>
+                            <option value="ecomm">Digital E-Commerce</option>
+                        </select>
+                    </div>
+
+                    <!-- Universal Inputs -->
+                    <div id="group-universal" class="form-grid" style="grid-column: span 2;">
+                        <div class="form-group">
+                            <label>General Tenure</label>
+                            <input type="number" name="tenure_uni" value="12">
+                        </div>
+                        <div class="form-group">
+                            <label>Average Monthly Revenue ($)</label>
+                            <input type="number" name="monthly_uni" value="70">
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label>Total Account Value ($)</label>
+                            <input type="number" name="total_uni" value="840">
+                        </div>
+                    </div>
+
+                    <!-- Telco Inputs -->
+                    <div id="group-telco" class="form-grid" style="grid-column: span 2; display: none;">
+                        <div class="form-group">
+                            <label>Telco Tenure (Months)</label>
+                            <input type="number" name="tenure_telco" id="inp-tenure-telco" value="24">
+                        </div>
+                        <div class="form-group">
+                            <label>Monthly Charges</label>
+                            <input type="number" name="monthly_telco" id="inp-monthly-telco" value="85">
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label>Total Charges (Lifetime)</label>
+                            <input type="number" name="total_telco" id="inp-total-telco" value="2000">
+                        </div>
+                    </div>
+
+                    <!-- Bank Inputs -->
+                    <div id="group-bank" class="form-grid" style="grid-column: span 2; display: none;">
+                        <div class="form-group">
+                            <label>Bank Tenure (Years)</label>
+                            <input type="number" name="tenure_bank" id="inp-tenure-bank" value="5">
+                        </div>
+                        <div class="form-group">
+                            <label>Estimated Annual Salary ($)</label>
+                            <input type="number" name="salary" id="inp-salary-bank" value="100000">
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label>Account Balance ($)</label>
+                            <input type="number" name="balance" id="inp-balance-bank" value="50000">
+                        </div>
+                    </div>
+
+                    <!-- Ecomm Inputs -->
+                    <div id="group-ecomm" class="form-grid" style="grid-column: span 2; display: none;">
+                        <div class="form-group">
+                            <label>Account Age (Months)</label>
+                            <input type="number" name="tenure_ecomm" value="12">
+                        </div>
+                        <div class="form-group">
+                            <label>Monthly Purchase Value</label>
+                            <input type="number" name="monthly_ecomm" value="250">
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label>Total Cashback Earned ($)</label>
+                            <input type="number" name="total_ecomm" value="300">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-predict">Analyze Risk & Predict Churn</button>
+                </form>
+            </div>
+
+            <div class="results-container">
+                <div class="card animate-fade" style="flex: 1;">
+                    <h2 class="section-title"><i class="fas fa-chart-pie"></i> Prediction Result</h2>
+                    <div id="result-box" class="prediction-result" style="display: none;">
+                        <div class="result-status" id="result-status">Low Risk</div>
+                        <div class="result-score" id="result-score">Confidence: 0%</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="churnChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
