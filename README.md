@@ -24,17 +24,17 @@ ChurnAI is an industry-level predictive analytics system designed to identify cu
 - `frontend/`: Dashboard UI and client-side logic.
 - `dataset/`: Original datasets used for training.
 
-## ⚙️ How to Run Locally
+## ⚙️ Deployment & Live Demo
 
-### **One-Click Startup (Windows)**
-- Double-click `dev.bat`
+The project is fully hosted on **Vercel** and does not require any local server to be running.
 
-### **Manual Startup**
-1. Clone the repository.
-2. Install dependencies: `npm install` and `pip install -r requirements.txt`.
-3. Train the model: `npm run train`.
-4. Start the backend: `npm run dev` (uses nodemon for auto-restart on save).
-5. Open: `http://localhost:3000`
+### **Live URL**
+- **[https://customer-churn-prediction-ml.vercel.app/](https://customer-churn-prediction-ml.vercel.app/)**
+
+### **How it Works**
+- The frontend is served as a static site.
+- The backend is a **Vercel Serverless Function** located in `/api/predict.js`.
+- Predictions are calculated on the fly in the cloud using the pre-trained ML models in the `/model` directory.
 
 ## 📈 Model Performance
 - **Primary Algorithm**: Logistic Regression (78.8% Accuracy)
