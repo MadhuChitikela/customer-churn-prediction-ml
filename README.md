@@ -1,6 +1,8 @@
 # ChurnAI | Customer Churn Prediction System
 
-![Churn Prediction Dashboard](https://raw.githubusercontent.com/username/repo/main/screenshot.png)
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-black?style=for-the-badge&logo=vercel)](https://customer-churn-prediction-ml.vercel.app/)
+
+![Churn Prediction Dashboard](https://raw.githubusercontent.com/MadhuChitikela/customer-churn-prediction-ml/main/screenshot.png)
 
 ## 🚀 Overview
 ChurnAI is an industry-level predictive analytics system designed to identify customers at high risk of churning. Using machine learning models (Logistic Regression for production deployment), it provides real-time risk assessment and high-fidelity visualizations.
