@@ -6,21 +6,28 @@ const url = require('url');
 const PORT = 3000;
 
 // Load ML handler logic from api/predict.js
-const predictHandler = require('./api/predict.js');
+let predictHandler;
+try {
+    predictHandler = require('./api/predict.js');
+} catch (e) {
+    console.error("Critical: Could not load predict handler!", e.message);
+}
 
 const server = http.createServer((req, res) => {
     const parsedUrl = url.parse(req.url, true);
     let pathname = parsedUrl.pathname;
 
     // Simulate Vercel Rewrites
-    if (pathname === '/' || pathname === '/index.html') {
-        pathname = '/frontend/index.html';
-    } else if (pathname === '/script.js') {
-        pathname = '/frontend/script.js';
-    } else if (pathname === '/style.css') {
-        pathname = '/frontend/style.css';
-    } else if (pathname === '/stats.json') {
-        pathname = '/frontend/stats.json';
+    const rewrites = {
+        '/': '/frontend/index.html',
+        '/index.html': '/frontend/index.html',
+        '/script.js': '/frontend/script.js',
+        '/style.css': '/frontend/style.css',
+        '/stats.json': '/frontend/stats.json'
+    };
+
+    if (rewrites[pathname]) {
+        pathname = rewrites[pathname];
     }
 
     // Handle API
@@ -28,25 +35,36 @@ const server = http.createServer((req, res) => {
         let body = '';
         req.on('data', chunk => body += chunk.toString());
         req.on('end', () => {
-            // Mock Vercel req/res for the predict handler
-            const vReq = { body: JSON.parse(body), method: 'POST' };
-            const vRes = {
-                status: (code) => ({
+            try {
+                const payload = JSON.parse(body);
+                const vReq = { body: payload, method: 'POST' };
+                const vRes = {
+                    status: (code) => ({
+                        json: (data) => {
+                            res.writeHead(code, {
+                                'Content-Type': 'application/json',
+                                'Cache-Control': 'no-cache'
+                            });
+                            res.end(JSON.stringify(data));
+                        }
+                    }),
                     json: (data) => {
-                        res.writeHead(code, { 'Content-Type': 'application/json' });
+                        res.writeHead(200, {
+                            'Content-Type': 'application/json',
+                            'Cache-Control': 'no-cache'
+                        });
                         res.end(JSON.stringify(data));
                     }
-                }),
-                json: (data) => {
-                    res.writeHead(200, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify(data));
-                }
-            };
+                };
 
-            try {
-                predictHandler(vReq, vRes);
+                if (predictHandler) {
+                    predictHandler(vReq, vRes);
+                } else {
+                    res.writeHead(503);
+                    res.end(JSON.stringify({ error: "ML Engine not loaded" }));
+                }
             } catch (err) {
-                console.error(err);
+                console.error("API Processing Error:", err);
                 res.writeHead(500);
                 res.end(JSON.stringify({ error: err.message }));
             }
@@ -62,11 +80,7 @@ const server = http.createServer((req, res) => {
         '.html': 'text/html',
         '.js': 'text/javascript',
         '.css': 'text/css',
-        '.json': 'application/json',
-        '.png': 'image/png',
-        '.jpg': 'image/jpg',
-        '.gif': 'image/gif',
-        '.svg': 'image/svg+xml'
+        '.json': 'application/json'
     };
 
     const contentType = mimeTypes[extname] || 'application/octet-stream';
@@ -75,13 +89,18 @@ const server = http.createServer((req, res) => {
         if (error) {
             if (error.code == 'ENOENT') {
                 res.writeHead(404);
-                res.end('File not found');
+                res.end('File not found: ' + pathname);
             } else {
                 res.writeHead(500);
-                res.end('Sorry, check with the site admin for error: ' + error.code + ' ..\n');
+                res.end('Server Error: ' + error.code);
             }
         } else {
-            res.writeHead(200, { 'Content-Type': contentType });
+            res.writeHead(200, {
+                'Content-Type': contentType,
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            });
             res.end(content, 'utf-8');
         }
     });
@@ -89,11 +108,11 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, () => {
     console.log(`
-🚀 Dashboard Live on Localhost! 
---------------------------------
-🔗 URL: http://localhost:${PORT}
---------------------------------
-API Status: ACTIVE
-ML Engine: READY
+🚀 ChurnAI Dashboard | Multi-Source ML
+--------------------------------------
+🔗 View Locally: http://localhost:${PORT}
+📁 Dashboard Path: ${path.join(__dirname, 'frontend')}
+--------------------------------------
+(Press Ctrl+C to stop)
   `);
 });
