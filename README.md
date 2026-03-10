@@ -25,10 +25,16 @@ ChurnAI is an industry-level predictive analytics system designed to identify cu
 - `dataset/`: Original datasets used for training.
 
 ## ⚙️ How to Run Locally
+
+### **One-Click Startup (Windows)**
+- Double-click `dev.bat`
+
+### **Manual Startup**
 1. Clone the repository.
-2. Install dependencies: `pip install -r requirements.txt` (only for model training).
-3. Train or Update the model: `python model/train_lite.py`.
-4. Run locally using Vercel CLI: `vercel dev`.
+2. Install dependencies: `npm install` and `pip install -r requirements.txt`.
+3. Train the model: `npm run train`.
+4. Start the backend: `npm run dev` (uses nodemon for auto-restart on save).
+5. Open: `http://localhost:3000`
 
 ## 📈 Model Performance
 - **Primary Algorithm**: Logistic Regression (78.8% Accuracy)
