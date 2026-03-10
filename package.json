@@ -9,8 +9,9 @@
     },
     "main": "index.js",
     "scripts": {
-        "start": "next start",
-        "dev": "vercel dev"
+        "start": "node server.js",
+        "dev": "nodemon server.js",
+        "train": "python model/train_universal.py"
     },
     "dependencies": {
         "chart.js": "^4.4.1"
