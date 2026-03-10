@@ -19,11 +19,11 @@ const server = http.createServer((req, res) => {
 
     // Simulate Vercel Rewrites
     const rewrites = {
-        '/': '/frontend/index.html',
-        '/index.html': '/frontend/index.html',
-        '/script.js': '/frontend/script.js',
-        '/style.css': '/frontend/style.css',
-        '/stats.json': '/frontend/stats.json'
+        '/': '/index.html',
+        '/index.html': '/index.html',
+        '/script.js': '/script.js',
+        '/style.css': '/style.css',
+        '/stats.json': '/stats.json'
     };
 
     if (rewrites[pathname]) {
@@ -111,7 +111,7 @@ server.listen(PORT, () => {
 🚀 ChurnAI Dashboard | Multi-Source ML
 --------------------------------------
 🔗 View Locally: http://localhost:${PORT}
-📁 Dashboard Path: ${path.join(__dirname, 'frontend')}
+📁 Dashboard Path: ${__dirname}
 --------------------------------------
 (Press Ctrl+C to stop)
   `);

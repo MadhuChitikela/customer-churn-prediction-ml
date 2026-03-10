@@ -58,7 +58,7 @@ stats = {
     "accuracy": model_data["accuracy"]
 }
 
-with open('frontend/stats.json', 'w') as f:
+with open('stats.json', 'w') as f:
     json.dump(stats, f)
 
 print(f"Logistic Model exported: {stats['accuracy']:.2f}% accuracy")

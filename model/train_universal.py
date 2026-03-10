@@ -86,7 +86,7 @@ stats["accuracy"] = model_data["accuracy"]
 with open('model/model_lite.json', 'w') as f:
     json.dump(model_data, f)
 
-with open('frontend/stats.json', 'w') as f:
+with open('stats.json', 'w') as f:
     json.dump(stats, f)
 
 print(f"Universal Model trained on 3 datasets! Accuracy: {stats['accuracy']:.2f}%")
